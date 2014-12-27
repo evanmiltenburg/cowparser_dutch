@@ -17,9 +17,16 @@ def sentence_generator(filename,separate=True,gzipped=True):
     source = gzip.GzipFile(filename) if gzipped else filename
     parser = etree.iterparse(source,html=True)
     for x,y in parser:
-        trips = [w.split('\t') for w in y.text.strip().split('\n')]
-        yield y.attrib, zip(*trips) if separate else trips
+        try:
+            trips = [w.split('\t') for w in y.text.strip().split('\n')]
+            yield y.attrib, zip(*trips) if separate else trips
+        except AttributeError:
+            print 'No text for this element!'
+            pass
         y.clear()
+        for ancestor in y.xpath('ancestor-or-self::*'):
+            while ancestor.getprevious() is not None:
+                del ancestor.getparent()[0]
 
 def sentences_for_dir(path='./',separate=True,gzipped=True):
     """Sentence generator for an entire corpus directory.
