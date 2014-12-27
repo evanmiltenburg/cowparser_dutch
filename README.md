@@ -48,7 +48,3 @@ most reliable sources, one should select sentences with a boilerplate score ('bp
     highest_quality = (data for metadata, data in sentences_for_dir()
                             if  metadata['bpc']=='a' and
                                 metadata['bdc']=='a')
-
-### TO DO
-- Decrease memory consumption. See [this page](http://stackoverflow.com/questions/12160418/why-is-lxml-etree-iterparse-eating-up-all-my-memory)
-- ...
