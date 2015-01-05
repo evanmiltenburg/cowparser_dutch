@@ -51,7 +51,7 @@ def sentences_for_dir(path='./',separate=True,gzipped=True):
 
 def contains(small, big):
     """Checks if a small sequence is contained in a larger sequence.
-    
+    Not perfect: only a single result per sentence! But for a corpus of this size that's fine.
     I think I got this from a StackExchange answer, but forgot to bookmark it."""
     for i in xrange(len(big)-len(small)+1):
         for j in xrange(len(small)):
@@ -60,3 +60,24 @@ def contains(small, big):
         else:
             return i, i+len(small)
     return False
+
+def pospattern(pattern_list,filename,path='./',gzipped=True,buffer_size=500):
+    """Search for a particular sequence of parts-of-speech in the corpus.
+    
+    Usage example:
+    >>> pospattern(['det__art', 'adj', 'nounsg'],'modified_noun_phrases.txt')
+    
+    A larger buffer will speed up the process (less i/o) but consume more memory.
+    """
+    gen = sentences_for_dir(path=path,gzipped=gzipped)  # create sentence generator
+    write_buffer = []                                   # initialize buffer
+    for metadata, sentence in gen:                     # Loop through the sentences
+        contained = contains(pattern_list,sentence[1])  # check if the sentences contain the pattern
+        if contained:                                   # if so, append to buffer.
+            write_buffer.append(' '.join(sentence[0][contained[0]:contained[1]]).encode('utf-8') + '\n')
+        if len(write_buffer) > buffer_size:             # and once the buffer is large enough
+            with open(filename,'a') as f:              # open up a file
+                f.writelines(write_buffer)              # and write out the results
+            write_buffer = []                           # reset the buffer
+    with open(filename,'a') as f:                      # open the file
+        f.writelines(write_buffer)                      # write remaining results.
