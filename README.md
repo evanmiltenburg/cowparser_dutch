@@ -5,8 +5,7 @@ This repository contains a python script for the COW corpus data made available 
 This corpus was created by Felix Bildhauer and Roland Schäfer.
 A full description of the work behind this data can be found at [corporafromtheweb.org](http://corporafromtheweb.org/).
 
-I tested the script on the Dutch portion on the data, but it should work on the other corpora as well, except if the XML format is different, like with English. I am currently working to provide a parser for English as well.
-
+I tested the script on the Dutch portion on the data, but it should work on the other corpora as well, except if the XML format is different. See [here](https://github.com/evanmiltenburg/cowparser_english) for a parser that can handle the English COW-data.
 
 For those interested: the Dutch shuffle corpus contains 4,732,581,841 tokens. Rather than unpacking the corpus,
 the script directly goes through the gzipped xml files, saving a lot of disk space.
